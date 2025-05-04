@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::error::Error;
 
 struct Post {
-    front_matter: String,
+    front_matter: HashMap<String, String>,
     body: String,
 }
 
@@ -29,11 +29,26 @@ fn read_content(source_directory: &str) -> HashMap<String, String> {
     for (file_name, content) in posts.clone() {
         let post = parse_content(&content).unwrap();
         println!("{}", file_name);
-        println!("{}", post.front_matter);
+        println!("{:?}", post.front_matter);
         println!("{}", post.body);
     }
 
     posts
+}
+
+fn parse_front_matter(lines: Vec<String>) -> Result<HashMap<String, String>, String> {
+    let mut front_matter = HashMap::new();
+
+    for line in lines {
+        let parts = line.splitn(2, ':').collect::<Vec<&str>>();
+        let key = parts[0].trim();
+        let value = parts[1].trim();
+        if !value.is_empty() {
+            front_matter.insert(key.to_string(), value.to_string());
+        }
+    }
+
+    Ok(front_matter)
 }
 
 fn parse_content(content: &str) -> Result<Post, String> {
@@ -66,7 +81,7 @@ fn parse_content(content: &str) -> Result<Post, String> {
     }
 
     Ok(Post {
-        front_matter: front_matter.join("\n"),
+        front_matter: parse_front_matter(front_matter).unwrap(),
         body: body.join("\n"),
     })
 }
@@ -90,7 +105,10 @@ mod tests {
         );
         let content = content.trim();
 
-        let expected_front_matter = "title: My First Post\ndate: 2021-01-01";
+        let expected_front_matter = HashMap::from([
+            ("title".to_string(), "My First Post".to_string()),
+            ("date".to_string(), "2021-01-01".to_string()),
+        ]);
         let expected_body = "This is my first post.";
 
         let post = parse_content(&content).unwrap();
@@ -109,7 +127,7 @@ mod tests {
         );
         let content = content.trim();
 
-        let expected_front_matter = "";
+        let expected_front_matter = HashMap::new();
         let expected_body = "This is my first post.";
 
         let post = parse_content(&content).unwrap();
@@ -129,11 +147,46 @@ mod tests {
         );
         let content = content.trim();
 
-        let expected_front_matter = "title: My First Post\ndate: 2021-01-01";
+        let expected_front_matter = HashMap::from([
+            ("title".to_string(), "My First Post".to_string()),
+            ("date".to_string(), "2021-01-01".to_string()),
+        ]);
         let expected_body = "";
 
         let post = parse_content(&content).unwrap();
         assert_eq!(post.front_matter, expected_front_matter);
         assert_eq!(post.body, expected_body);
+    }
+
+    #[test]
+    fn test_parse_front_matter_ok() {
+        let front_matter = vec![
+            "title: My First Post".to_string(),
+            "date: 2021-01-01".to_string(),
+        ];
+        let front_matter = parse_front_matter(front_matter).unwrap();
+        assert_eq!(
+            front_matter.get("title"),
+            Some(&"My First Post".to_string())
+        );
+        assert_eq!(front_matter.get("date"), Some(&"2021-01-01".to_string()));
+    }
+
+    #[test]
+    fn test_parse_front_matter_empty_field() {
+        let front_matter = vec!["title: My First Post".to_string(), "date:".to_string()];
+        let front_matter = parse_front_matter(front_matter).unwrap();
+        assert_eq!(
+            front_matter.get("title"),
+            Some(&"My First Post".to_string())
+        );
+        assert_eq!(front_matter.get("date"), None);
+    }
+
+    #[test]
+    fn test_parse_front_matter_empty() {
+        let front_matter = vec![];
+        let front_matter = parse_front_matter(front_matter).unwrap();
+        assert_eq!(front_matter.len(), 0);
     }
 }
