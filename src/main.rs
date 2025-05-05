@@ -1,8 +1,6 @@
-use std::collections::HashMap;
-use std::error::Error;
-
 mod content_parser;
 mod content_reader;
+mod content_render;
 mod entities;
 
 use content_parser::parse_content;
