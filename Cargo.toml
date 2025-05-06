@@ -5,5 +5,6 @@ edition = "2024"
 
 [dependencies]
 markdown = "1.0.0"
+minijinja =  "2.9.0"
 pretty_assertions = "1"
 textwrap = "0.16.2"
