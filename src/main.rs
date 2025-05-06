@@ -1,6 +1,7 @@
 mod content_parser;
 mod content_reader;
 mod content_render;
+mod content_writer;
 mod entities;
 
 use content_parser::parse_content;
