@@ -1,4 +1,4 @@
-use crate::entities::RawPost;
+use crate::entities::{ContentKind, RawPost};
 use std::collections::HashMap;
 
 fn parse_front_matter(lines: Vec<String>) -> Result<HashMap<String, String>, String> {
@@ -49,6 +49,7 @@ pub fn parse_content(og_path: &str, content: &str) -> Result<RawPost, String> {
         front_matter: parse_front_matter(front_matter).unwrap(),
         body: body.join("\n"),
         og_path: og_path.to_string(),
+        kind: ContentKind::Markdown, // TODO: Currently only markdown is supported
     })
 }
 

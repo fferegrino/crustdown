@@ -1,4 +1,4 @@
-use crate::entities::RawPost;
+use crate::entities::{ContentKind, RawPost};
 use minijinja::{Environment, context};
 pub enum Content<T> {
     Markdown(T),
@@ -100,6 +100,7 @@ mod tests {
             og_path: "test.md".to_string(),
             front_matter: metadata,
             body: "Hello, world!".to_string(),
+            kind: ContentKind::Markdown,
         });
         let rendered_post = renderer.render(&post);
         assert_eq!(
