@@ -16,7 +16,7 @@ fn parse_front_matter(lines: Vec<String>) -> Result<HashMap<String, String>, Str
     Ok(front_matter)
 }
 
-pub fn parse_content(content: &str) -> Result<RawPost, String> {
+pub fn parse_content(og_path: &str, content: &str) -> Result<RawPost, String> {
     let mut front_matter = Vec::<String>::new();
     let mut body = Vec::<String>::new();
 
@@ -48,6 +48,7 @@ pub fn parse_content(content: &str) -> Result<RawPost, String> {
     Ok(RawPost {
         front_matter: parse_front_matter(front_matter).unwrap(),
         body: body.join("\n"),
+        og_path: og_path.to_string(),
     })
 }
 
@@ -76,9 +77,10 @@ mod tests {
         ]);
         let expected_body = "This is my first post.";
 
-        let post = parse_content(&content).unwrap();
+        let post = parse_content("test.md", &content).unwrap();
         assert_eq!(post.front_matter, expected_front_matter);
         assert_eq!(post.body, expected_body);
+        assert_eq!(post.og_path, "test.md");
     }
 
     #[test]
@@ -95,9 +97,10 @@ mod tests {
         let expected_front_matter = HashMap::new();
         let expected_body = "This is my first post.";
 
-        let post = parse_content(&content).unwrap();
+        let post = parse_content("test.md", &content).unwrap();
         assert_eq!(post.front_matter, expected_front_matter);
         assert_eq!(post.body, expected_body);
+        assert_eq!(post.og_path, "test.md");
     }
 
     #[test]
@@ -118,9 +121,10 @@ mod tests {
         ]);
         let expected_body = "";
 
-        let post = parse_content(&content).unwrap();
+        let post = parse_content("test.md", &content).unwrap();
         assert_eq!(post.front_matter, expected_front_matter);
         assert_eq!(post.body, expected_body);
+        assert_eq!(post.og_path, "test.md");
     }
 
     #[test]

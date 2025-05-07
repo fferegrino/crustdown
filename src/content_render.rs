@@ -97,6 +97,7 @@ mod tests {
         let mut metadata = HashMap::new();
         metadata.insert("title".to_string(), "¡Hola mundo!".to_string());
         let post = Content::Markdown(RawPost {
+            og_path: "test.md".to_string(),
             front_matter: metadata,
             body: "Hello, world!".to_string(),
         });
