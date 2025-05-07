@@ -7,14 +7,29 @@ mod entities;
 
 use content_parser::parse_content;
 use content_reader::read_content;
+use content_render::Rendererer;
+use content_router::ContentRouter;
 fn main() {
     let default_posts_path = "_posts";
     let posts = read_content(default_posts_path);
 
-    for (file_name, content) in posts.iter() {
+    let posts = posts.iter().map(|(file_name, content)| {
         let post = parse_content(file_name, content).unwrap();
-        println!("{}", file_name);
-        println!("{:?}", post.front_matter);
-        println!("{}", post.body);
+        post
+    });
+
+    let router = ContentRouter::new(default_posts_path.to_string());
+    let content_renderer = Rendererer::new();
+
+    let mut rendered_posts = Vec::new();
+    let mut rendered_routes = Vec::new();
+
+    for post in posts {
+        let route = router.route_post(&post);
+        let rendered_post = content_renderer.render_post(&post);
+        rendered_posts.push(rendered_post);
+        rendered_routes.push(route);
     }
+
+    
 }

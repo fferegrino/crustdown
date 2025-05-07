@@ -1,8 +1,5 @@
 use crate::entities::{ContentKind, RawPost};
 use minijinja::{Environment, context};
-pub enum Content<T> {
-    Markdown(T),
-}
 
 fn render_markdown_post(post_body: &str) -> String {
     markdown::to_html(post_body)
@@ -23,14 +20,12 @@ impl<'a> Rendererer<'a> {
         Rendererer { env }
     }
 
-    pub fn render(&self, content: &Content<RawPost>) -> String {
-        let body = match content {
-            Content::Markdown(content) => render_markdown_post(&content.body),
+    pub fn render_post(&self, content: &RawPost) -> String {
+        let body = match content.kind {
+            ContentKind::Markdown => render_markdown_post(&content.body),
         };
 
-        let metadata = match content {
-            Content::Markdown(content) => content.front_matter.clone(),
-        };
+        let metadata = content.front_matter.clone();
 
         let template = self.env.get_template("post.html").unwrap();
         template
@@ -96,13 +91,13 @@ mod tests {
         let renderer = Rendererer::new();
         let mut metadata = HashMap::new();
         metadata.insert("title".to_string(), "¡Hola mundo!".to_string());
-        let post = Content::Markdown(RawPost {
+        let post = RawPost {
             og_path: "test.md".to_string(),
             front_matter: metadata,
             body: "Hello, world!".to_string(),
             kind: ContentKind::Markdown,
-        });
-        let rendered_post = renderer.render(&post);
+        };
+        let rendered_post = renderer.render_post(&post);
         assert_eq!(
             rendered_post,
             "<!DOCTYPE html>
