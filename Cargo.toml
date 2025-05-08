@@ -2,13 +2,24 @@
 name = "crustdown"
 version = "0.1.0"
 edition = "2024"
+authors = ["Antonio Feregrino <antonio.feregrino@gmail.com>"]
+description = "A static site generator for markdown content"
+license = "MIT"
+repository = "https://github.com/fferegrino/crustdown"
+readme = "readme.md"
+
+[[bin]]
+name = "crustdown"
+path = "src/main.rs"
 
 [dependencies]
 markdown = "1.0.0"
-minijinja =  "2.9.0"
+minijinja = "2.9.0"
 pretty_assertions = "1"
 sluggify = "0.1.0"
 tempfile = "3.19.1"
 textwrap = "0.16.2"
 chrono = { version = "0.4", features = ["serde"] }
 serde = { version = "1.0.219", features = ["derive"] }
+clap = { version = "4.5", features = ["derive"] }
+anyhow = "1.0"

@@ -1,3 +1,6 @@
+use anyhow::Result;
+use clap::Parser;
+
 mod content_parser;
 mod content_reader;
 mod content_render;
@@ -10,18 +13,31 @@ use content_reader::read_content;
 use content_render::Rendererer;
 use content_router::ContentRouter;
 use content_writer::ContentWriter;
-use entities::{Metadata, PostOutput};
+use entities::PostOutput;
 
-fn main() {
-    let default_posts_path = "_posts";
-    let posts = read_content(default_posts_path);
+/// A static site generator for markdown content
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    /// Path to the posts directory
+    #[arg(short, long, default_value = "_posts")]
+    posts_dir: String,
 
-    let posts = posts.iter().map(|(file_name, content)| {
-        let post = parse_content(file_name, content).unwrap();
-        post
-    });
+    /// Path to the output directory
+    #[arg(short, long, default_value = "_site")]
+    output_dir: String,
+}
 
-    let router = ContentRouter::new(default_posts_path.to_string());
+fn main() -> Result<()> {
+    let args = Args::parse();
+
+    let posts = read_content(&args.posts_dir);
+
+    let posts = posts
+        .iter()
+        .map(|(file_name, content)| parse_content(file_name, content).unwrap());
+
+    let router = ContentRouter::new(args.posts_dir.clone());
     let content_renderer = Rendererer::new();
 
     let posts = posts.map(|post| {
@@ -35,7 +51,7 @@ fn main() {
         }
     });
 
-    let content_writer = ContentWriter::new("_site");
+    let content_writer = ContentWriter::new(&args.output_dir);
     content_writer.clean_output_dir();
 
     let posts = posts.collect::<Vec<_>>();
@@ -45,4 +61,6 @@ fn main() {
     for post in posts {
         content_writer.write_content(&post.route, &post.rendered_content);
     }
+
+    Ok(())
 }
