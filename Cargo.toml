@@ -10,3 +10,4 @@ pretty_assertions = "1"
 sluggify = "0.1.0"
 tempfile = "3.19.1"
 textwrap = "0.16.2"
+chrono = { version = "0.4", features = ["serde"] }
