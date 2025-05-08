@@ -1,4 +1,4 @@
-use crate::entities::{ContentKind, RawPost};
+use crate::entities::{ContentKind, PostOutput, RawPost};
 use minijinja::{Environment, context};
 
 fn render_markdown_post(post_body: &str) -> String {
@@ -15,6 +15,8 @@ impl<'a> Rendererer<'a> {
         env.add_template("layout.html", include_str!("_templates/layout.html"))
             .unwrap();
         env.add_template("post.html", include_str!("_templates/post.html"))
+            .unwrap();
+        env.add_template("index.html", include_str!("_templates/index.html"))
             .unwrap();
 
         Rendererer { env }
@@ -33,6 +35,20 @@ impl<'a> Rendererer<'a> {
                 post => context! {
                     content => body,
                     metadata => metadata
+                },
+            })
+            .unwrap()
+    }
+
+    pub fn render_index(&self, posts: &Vec<PostOutput>) -> String {
+        let template = self.env.get_template("index.html").unwrap();
+        template
+            .render(context! {
+                posts => posts,
+                site => context! {
+                    metadata => context! {
+                        title => "My Blog"
+                    }
                 },
             })
             .unwrap()

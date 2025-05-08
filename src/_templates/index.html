@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ site.metadata.title }}{% endblock %}
+
+{% block content %}
+{% for post in posts %}
+    <div class="post">
+        <h2>{{ post.metadata.title }}</h2>
+        <p>{{ post.metadata.date }}</p>
+        <p>{{ post.metadata.description }}</p>
+    </div>
+{% endfor %}
+{% endblock %}

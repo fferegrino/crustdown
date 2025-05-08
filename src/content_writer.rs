@@ -3,16 +3,16 @@ pub struct ContentWriter<'a> {
 }
 
 impl<'a> ContentWriter<'a> {
-    fn new(output_dir: &'a str) -> Self {
+    pub fn new(output_dir: &'a str) -> Self {
         Self { output_dir }
     }
 
-    fn clean_output_dir(&self) {
-        std::fs::remove_dir_all(self.output_dir).unwrap();
+    pub fn clean_output_dir(&self) {
+        std::fs::remove_dir_all(self.output_dir).unwrap_or_default();
         std::fs::create_dir_all(self.output_dir).unwrap();
     }
 
-    fn write_content(&self, path_from_root: &str, content: &str) {
+    pub fn write_content(&self, path_from_root: &str, content: &str) {
         let path = format!("{}/{}", self.output_dir, path_from_root);
         // Create parent directories if they don't exist
         if let Some(parent) = std::path::Path::new(&path).parent() {

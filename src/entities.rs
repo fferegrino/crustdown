@@ -1,4 +1,5 @@
 use chrono::NaiveDate;
+use serde::Serialize;
 use std::collections::HashMap;
 
 pub enum ContentKind {
@@ -12,6 +13,7 @@ pub struct RawPost {
     pub kind: ContentKind,
 }
 
+#[derive(Debug, Clone, Serialize)]
 pub struct Metadata {
     pub title: String,
     pub description: String,
@@ -20,6 +22,7 @@ pub struct Metadata {
     pub extras: HashMap<String, String>,
 }
 
+#[derive(Debug, Clone, Serialize)]
 pub struct PostOutput {
     pub route: String,
     pub metadata: Metadata,
