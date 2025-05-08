@@ -1,5 +1,4 @@
 use crate::entities::{ContentKind, RawPost};
-use std::collections::HashMap;
 
 pub struct ContentRouter {
     posts_path: String,
@@ -34,6 +33,7 @@ impl ContentRouter {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use std::collections::HashMap;
 
     #[test]
     fn get_path_with_no_extension_test() {

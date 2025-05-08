@@ -13,7 +13,7 @@ use content_reader::read_content;
 use content_render::Rendererer;
 use content_router::ContentRouter;
 use content_writer::ContentWriter;
-use entities::{Metadata, PostOutput};
+use entities::PostOutput;
 
 /// A static site generator for markdown content
 #[derive(Parser, Debug)]

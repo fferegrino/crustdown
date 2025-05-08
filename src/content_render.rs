@@ -9,7 +9,7 @@ pub struct Rendererer<'a> {
     env: Environment<'a>,
 }
 
-impl<'a> Rendererer<'a> {
+impl Rendererer<'_> {
     pub fn new() -> Self {
         let mut env = Environment::new();
         env.add_template("layout.html", include_str!("_templates/layout.html"))
