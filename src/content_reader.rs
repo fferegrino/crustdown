@@ -1,6 +1,7 @@
 use std::collections::HashMap;
+use std::path::Path;
 
-pub fn read_content(source_directory: &str) -> HashMap<String, String> {
+pub fn read_content<P: AsRef<Path>>(source_directory: &P) -> HashMap<String, String> {
     let mut posts = HashMap::new();
 
     let files = std::fs::read_dir(source_directory).unwrap();

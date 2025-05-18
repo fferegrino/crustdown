@@ -1,6 +1,8 @@
-use crate::entities::{ContentKind, Metadata, RawPost};
+use crate::entities::{ContentKind, Metadata, RawPost, SiteConfig};
 use chrono::NaiveDate;
 use std::collections::HashMap;
+use std::fs;
+use std::path::Path;
 
 fn parse_front_matter(lines: Vec<String>) -> Result<HashMap<String, String>, String> {
     let mut front_matter = HashMap::new();
@@ -78,6 +80,14 @@ pub fn parse_metadata(front_matter: HashMap<String, String>) -> Result<Metadata,
         tags,
         extras: front_matter,
     })
+}
+
+pub fn parse_site_config<P: AsRef<Path>>(config: &P) -> Result<SiteConfig, String> {
+    let config =
+        fs::read_to_string(config).map_err(|e| format!("Failed to read site config: {}", e))?;
+    let config =
+        serde_yaml::from_str(&config).map_err(|e| format!("Invalid site config: {}", e))?;
+    Ok(config)
 }
 
 #[cfg(test)]
