@@ -36,6 +36,11 @@ impl Rendererer<'_> {
                     content => body,
                     metadata => metadata
                 },
+                site => context! {
+                    metadata => context! {
+                        title => "Blog"
+                    }
+                },
             })
             .unwrap()
     }
@@ -117,16 +122,32 @@ mod tests {
         assert_eq!(
             rendered_post,
             "<!DOCTYPE html>
-<html>
+<html lang=\"en\">
     <head>
+        <meta charset=\"utf-8\">
+        <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
         <title>¡Hola mundo!</title>
+        <link rel=\"stylesheet\" href=\"https://unpkg.com/@picocss/pico@2.0.6/css/pico.min.css\">
     </head>
     <body>
+        <main class=\"container\">
+            <header>
+                <h1>Blog</h1>
+            </header>
 
-    <div class=\"post-content\">
-        <p>Hello, world!</p>
-    </div>
+    <article>
+        <header>
+            <h2>¡Hola mundo!</h2>
+            <small></small>
+        </header>
+        <section>
+<!-- Post content -->
+<p>Hello, world!</p>
+<!-- End of post content -->
+        </section>
+    </article>
 
+        </main>
     </body>
 </html>"
         );
