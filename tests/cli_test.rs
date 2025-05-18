@@ -4,7 +4,7 @@ use pretty_assertions::assert_eq;
 use std::fs;
 use tempfile::TempDir;
 
-static INPUT_POST_LOCATION: &str = "tests/file_fixtures/inputs/_posts";
+static INPUT_POST_LOCATION: &str = "tests/file_fixtures/inputs/posts";
 static OUTPUT_POST_LOCATION: &str = "tests/file_fixtures/outputs";
 
 fn compare_files(file1: &str, file2: &str) -> Result<()> {
