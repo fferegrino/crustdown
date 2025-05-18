@@ -14,6 +14,7 @@ path = "src/main.rs"
 
 [dependencies]
 anyhow = "1.0"
+assert_cmd = "2.0"
 cargo-tag = "0.1.1"
 chrono = { version = "0.4", features = ["serde"] }
 clap = { version = "4.5", features = ["derive"] }
@@ -24,3 +25,6 @@ serde = { version = "1.0.219", features = ["derive"] }
 sluggify = "0.1.0"
 tempfile = "3.19.1"
 textwrap = "0.16.2"
+
+[dev-dependencies]
+copy_dir = "0.1.3"
