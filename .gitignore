@@ -1,4 +1,5 @@
 /target
+.DS_Store
 
 # crustdown specific files
 _posts/

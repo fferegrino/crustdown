@@ -24,6 +24,10 @@ jobs:
             target
         key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
+    - name: Install tooling
+      run: |
+        cargo install cargo-sort
+
     - name: Check dependency sorting
       run: cargo sort --check
     
