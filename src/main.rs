@@ -37,7 +37,7 @@ fn main() -> Result<()> {
         .iter()
         .map(|(file_name, content)| parse_content(file_name, content).unwrap());
 
-    let router = ContentRouter::new(args.posts_dir.clone());
+    let router = ContentRouter::new("posts".to_string());
     let content_renderer = Rendererer::new();
 
     let posts = posts.map(|post| {
