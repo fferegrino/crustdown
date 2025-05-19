@@ -1,5 +1,5 @@
 use chrono::NaiveDate;
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 pub enum ContentKind {
@@ -27,4 +27,10 @@ pub struct PostOutput {
     pub route: String,
     pub metadata: Metadata,
     pub rendered_content: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SiteConfig {
+    pub title: String,
+    pub description: String,
 }

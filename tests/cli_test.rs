@@ -4,7 +4,8 @@ use pretty_assertions::assert_eq;
 use std::fs;
 use tempfile::TempDir;
 
-static INPUT_POST_LOCATION: &str = "tests/file_fixtures/inputs/posts";
+static INPUT_CONTENT_LOCATION: &str = "tests/file_fixtures/inputs";
+static INPUT_POST_LOCATION: &str = "posts";
 static OUTPUT_POST_LOCATION: &str = "tests/file_fixtures/outputs";
 
 fn compare_files(file1: &str, file2: &str) -> Result<()> {
@@ -37,6 +38,8 @@ fn test_basic_site_generation() -> Result<()> {
     let mut cmd = Command::cargo_bin("crustdown")?;
 
     let result = cmd
+        .arg("--root-dir")
+        .arg(INPUT_CONTENT_LOCATION)
         .arg("--posts-dir")
         .arg(INPUT_POST_LOCATION)
         .arg("--output-dir")

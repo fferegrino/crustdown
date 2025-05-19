@@ -1,4 +1,4 @@
-use crate::entities::{ContentKind, PostOutput, RawPost};
+use crate::entities::{ContentKind, PostOutput, RawPost, SiteConfig};
 use minijinja::{Environment, context};
 
 fn render_markdown_post(post_body: &str) -> String {
@@ -22,7 +22,7 @@ impl Rendererer<'_> {
         Rendererer { env }
     }
 
-    pub fn render_post(&self, content: &RawPost) -> String {
+    pub fn render_post(&self, content: &RawPost, site_config: &SiteConfig) -> String {
         let body = match content.kind {
             ContentKind::Markdown => render_markdown_post(&content.body),
         };
@@ -36,25 +36,17 @@ impl Rendererer<'_> {
                     content => body,
                     metadata => metadata
                 },
-                site => context! {
-                    metadata => context! {
-                        title => "Blog"
-                    }
-                },
+                site => site_config,
             })
             .unwrap()
     }
 
-    pub fn render_index(&self, posts: &Vec<PostOutput>) -> String {
+    pub fn render_index(&self, posts: &Vec<PostOutput>, site_config: &SiteConfig) -> String {
         let template = self.env.get_template("index.html").unwrap();
         template
             .render(context! {
                 posts => posts,
-                site => context! {
-                    metadata => context! {
-                        title => "My Blog"
-                    }
-                },
+                site => site_config,
             })
             .unwrap()
     }
@@ -118,7 +110,11 @@ mod tests {
             body: "Hello, world!".to_string(),
             kind: ContentKind::Markdown,
         };
-        let rendered_post = renderer.render_post(&post);
+        let site_config = SiteConfig {
+            title: "Blog".to_string(),
+            description: "A blog about my life".to_string(),
+        };
+        let rendered_post = renderer.render_post(&post, &site_config);
         assert_eq!(
             rendered_post,
             "<!DOCTYPE html>

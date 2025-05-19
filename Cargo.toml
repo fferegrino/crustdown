@@ -22,6 +22,7 @@ markdown = "1.0.0"
 minijinja = "2.9.0"
 pretty_assertions = "1"
 serde = { version = "1.0.219", features = ["derive"] }
+serde_yaml = "0.9.34"
 sluggify = "0.1.0"
 tempfile = "3.19.1"
 textwrap = "0.16.2"
